@@ -1,0 +1,75 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'me.tatarka.retrolambda'
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude "META-INF/services/javax.annotation.processing.Processor"
+    }
+    defaultConfig {
+        applicationId "formation.test.djory.xboxgames"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            NetworkInterface.getNetworkInterfaces().each {
+                iface ->
+                    iface.inetAddresses.each {
+                        addr ->
+                            if (addr instanceof Inet4Address && !addr.isLoopbackAddress())
+                                project.ext.localIP = addr.hostAddress
+                    }
+            }
+            buildConfigField "String", "rootUrl", "\"http://${project.ext.localIP}:5001/\""
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    // The second version is nice but in beta -> http://inthecheesefactory.com/blog/retrofit-2.0/en
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    // View Injection
+    compile 'com.jakewharton:butterknife:7.0.1'
+    // Dependency injection
+    apt 'com.google.dagger:dagger-compiler:2.0.1'
+    provided 'org.glassfish:javax.annotation:10.0-b28'
+    compile 'com.google.dagger:dagger:2.0.1'
+    // it simplifies the communication between components -> https://github.com/greenrobot/EventBus
+    compile 'de.greenrobot:eventbus:2.4.0'
+    // In order to use stream.
+    compile 'com.annimon:stream:1.0.4'
+    compile 'com.jakewharton.timber:timber:4.1.0'
+    compile 'com.android.support:design:23.1.0'
+    // For the galery
+    compile 'com.squareup.picasso:picasso:2.3.2'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
+    compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+        // exclusion is not necessary, but generally a good idea.
+        exclude group: 'com.google.android', module: 'support-v4'
+    }
+
+    androidTestCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12'
+}

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Xbox 360 Games</string>
+    <string name="game_none">\'%1$s\' is not in your cart.</string>
+    <string name="game_description">\"%1$s\": %2$s</string>
+    <string name="error_cart_empty">Your cart is empty</string>
+    <string name="quantity">Quantity: %1$s</string>
+    <string name="total_price">Total:  %1$.2f - %2$.2f = %3$.2f$</string>
+</resources>
